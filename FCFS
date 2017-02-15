@@ -1,0 +1,57 @@
+import java.util.ArrayList;
+
+public class FCFS 
+{
+	private static int QUANTA_MAX = 100;
+	private ArrayList<Process> processList;
+	private ArrayList<String> stringList;
+	private ArrayList<Process> values;
+	
+	public FCFS(ArrayList<Process> processList)
+	{
+		this.processList = processList;
+		stringList = new ArrayList<String>();
+		values = new ArrayList<Process>();
+		run();
+	}
+	
+	private void run()
+	{
+		int quanta =0;
+		
+		while(!processList.isEmpty() && quanta <= QUANTA_MAX)
+		{
+			Process process = processList.remove(0);
+			
+			while(process.getArrivalTime() > quanta)
+			{
+				stringList.add("");
+				quanta++;
+			}
+			
+			process.setActualTime(quanta);
+			while(process.getRunTime() >0)
+			{
+				stringList.add(process.getName());
+				process.decrementExpectedTotalRunTime();
+				process.incrementQuanta();
+				process.setEndTime(quanta);
+				quanta++;
+			}
+			values.add(process);
+		}
+	}
+	
+	public ArrayList<String> getStringList()
+	{
+		return stringList;
+	}
+	
+	public ArrayList<Process> getValues()
+	{
+		return values;
+	}
+	
+	
+	
+}
