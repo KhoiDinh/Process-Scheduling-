@@ -2,7 +2,6 @@ import java.util.Random;
 
 public class Process 
 {
-	
 	private float arrivalTime;  
 	private float expectedTotalRunTime;
 	private int priority;
@@ -92,6 +91,11 @@ public class Process
 	public float getQuantaTime()
 	{
 		return quantaTime;
+	}
+	
+	public float getEndTime()
+	{
+		return endTime;
 	}
 
 	public void incrementQuanta()
