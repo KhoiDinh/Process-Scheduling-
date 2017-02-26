@@ -6,67 +6,86 @@ import java.util.List;
 
 public class Tester
 {
-	public static void main(String[] args) {
-
+	public static void main(String[] args) 
+	{
+		ArrayList<String>ThroughputAverages = new ArrayList<String>();
 		ArrayList<Process> list1 = new ArrayList <Process>();
 		ArrayList<Process> list2 = new ArrayList <Process>();
-        ArrayList<Process> list3 = new ArrayList <Process>();
-        ArrayList<Process> list4 = new ArrayList <Process>();
-        ArrayList<Process> list5 = new ArrayList <Process>();
+		ArrayList<Process> list3 = new ArrayList <Process>();
+		ArrayList<Process> list4 = new ArrayList <Process>();
+		ArrayList<Process> list5 = new ArrayList <Process>();
 
+		int processCount = 1;
+		float avgThroughput = 0;
 
-		//Creates processes and random values to them
 		int numberOfRuns = 30;
 		for(int i=0; i<numberOfRuns*5; i++)
 		{
 			Process n = new Process(i);
-            if (i < numberOfRuns )
-            {   list1.add(n); }
-            else if (i < numberOfRuns * 2)
-            {   list2.add(n); }
-            else if (i < numberOfRuns *3)
-            {   list3.add(n); }
-            else if (i < numberOfRuns *4)
-            {   list4.add(n); }
-            else
-            {   list5.add(n); }
-
-
+			if (i < numberOfRuns )
+			{  
+				list1.add(n); 
+			}
+			else if (i < numberOfRuns * 2)
+			{  
+				list2.add(n); 
+			}
+			else if (i < numberOfRuns *3)
+			{  
+				list3.add(n);
+			}
+			else if (i < numberOfRuns *4)
+			{  
+				list4.add(n); 
+			}
+			else
+			{   
+				list5.add(n); 
+			}
 		}
 
 		SortLists(list1, list2, list3, list4, list5);
 
-		// print out lists
-		System.out.println("Pre scheduled process lists:");
-		System.out.println("list1: \n" + printProcessList(list1) );
+		System.out.println("Intial process lists:");
+		System.out.println("List1: ");
+		System.out.println(getProcessList(list1));
+		System.out.println("List2: ");
+		System.out.println(getProcessList(list2));;
+		System.out.println("List3: ");
+		System.out.println(getProcessList(list3));;
+		System.out.println("List4: ");
+		System.out.println(getProcessList(list4));;
+		System.out.println("List5: ");
+		System.out.println(getProcessList(list5));;
+		System.out.println();
 
-
-		int count = 1;
-		float avgThroughput = 0;
-
-		// FCFS results
-		System.out.println("First Come First Served");        
-		ArrayList<ArrayList<Process>> FCFSclone = deepCopy(list1, list2, list3, list4, list5);
-		for (ArrayList<Process> list: FCFSclone)
+		//FCFS
+		System.out.println("FCFS (First Come First Served)");        
+		ArrayList<ArrayList<Process>> FCFScopy = copyProcesses(list1, list2, list3, list4, list5);
+		for (int i=0; i< FCFScopy.size();i++)//(ArrayList<Process> list: FCFScopy)
 		{
-			System.out.println("*Processing list"+count+++"*");
+			ArrayList<Process> list = FCFScopy.get(i);
+			System.out.println("PROCESSING List"+ processCount );
+			
+			processCount++;
+			
 			FCFS fcfs = new FCFS(list);
-			System.out.println(printTimeline());
-			System.out.println(printStringList(fcfs.getStringList()));;
-			System.out.println(Statistics.CalculateStats(fcfs.getValues()));
-			//            System.out.println(printProcessList(fcfs.getValues()));
+			
+			System.out.println(printTemplate());
+			System.out.println(printFilledTemplate(fcfs.getStringList()));;
+			System.out.println(Statistics.getStatistics(fcfs.getValues()));
 			avgThroughput+=Statistics.ThroughputCalculationHelper(fcfs.getValues());
 			System.out.println("Throughput: " + Statistics.ThroughputCalculationHelper(fcfs.getValues()));
+			System.out.println();
 		}
-		System.out.println("Avgerage Throughput: "+avgThroughput/5+"\n");
+		//System.out.println("Average Throughput: "+avgThroughput/5+"\n");
+		ThroughputAverages.add(avgThroughput/5 +"");
 		avgThroughput=0;
 		System.out.println("\n\n");
+		
+		getThroughputAverages(ThroughputAverages);//goes at the very end
 	}
 
-	/**
-	 * Sorts lists by arrival time.
-	 */
-	@SuppressWarnings("unused")
 	private static void SortLists(ArrayList<Process> list1,
 			ArrayList<Process> list2, ArrayList<Process> list3,
 			ArrayList<Process> list4, ArrayList<Process> list5) 
@@ -86,115 +105,121 @@ public class Tester
 	}
 
 
-	public static String printProcessList(List<Process> processList) 
+	public static String getProcessList(List<Process> processList) 
 	{
-		String s = "";
-		for(Process process : processList) 
+		/*
+		 * value += "Name: " + String.format("%3s", process.getName())+"\t" 
+			+ "Arrival Time: " + String.format("%10f", process.getArrivalTime()) +"\t" 
+			+ "Run Time: " + String.format("%9f", process.getRunTime()) +"\t" 
+			+ "Priority: " + process.getPriority() +"\t" 
+			+ "Final runtime: " + String.format("%9f", process.getRunTime())+"\t" 
+			+ "Time started: " + String.format("%3d", process.getActualTime())+"\t" 
+			+ "Turn Around time: " + String.format("%9f", process.getSwitchTime())+"\t" 
+			+ "Waiting time: " + String.format("%10f", process.getWait())+"\t" 
+			+ "Response time: " + String.format("%10f", process.getTimeValue())
+			+ "\n";
+		 */
+		String value = "";
+		for(int i=0; i<processList.size();i++)//(Process process : processList)
 		{
-			s+="[Name: " + String.format("%3s", process.getName()) 
-			+ " --> Arrival Time: " + String.format("%10f", process.getArrivalTime()) 
-			+ ", Run Time: " + String.format("%9f", process.getRunTime()) 
-			+ ", Priority: " + process.getPriority() 
-			+ ", Final runtime: " + String.format("%9f", process.getRunTime())
-			+ ", Time started: " + String.format("%9d", process.getActualTime())
-			+ ", Turn Around time: " + String.format("%9f", process.getSwitchTime())
-			+ ", Waiting time: " + String.format("%9f", process.getWait())
-			+ ", Responce time: " + String.format("%9f", process.getTimeValue())
-			+ "]\n";
+			Process process = processList.get(i);
+			
+			value += "Name/ Number Value: " + String.format("%3s", process.getName())+"\t" 
+			+ "Arrival Time: " + String.format("%10f", process.getArrivalTime()) +"\t" 
+			+ "Run Time: " + String.format("%9f", process.getRunTime()) +"\t" 
+			+ "Priority: " + process.getPriority()
+			+ "\n";
 		}
-		return s;
+		return value;
 	}
 
-	/**
-	 * Concatenates Processes log using list separating different strings with ]s.
-	 * @param stringList the string list
-	 * @return a String of the history
-	 */
-	public static String printStringList(List<String> stringList) 
+
+	public static String printFilledTemplate(List<String> stringList) 
 	{
 		String previousString = stringList.get(0);
 
-		String output = "[";
-		for(String string : stringList) 
+		String output = "{";
+		for(int i=0; i <stringList.size();i++)//(String string : stringList) 
 		{
+			String string = stringList.get(i);
 			if(string.equals(previousString)) 
 			{
-				output += String.format("%3s", string) + "|";
+				output +=  string +"\t";
 			}
 			else
 			{
-				output = output.substring(0, output.length() - 1); // remove last |
-				output += "]" + String.format("%3s", string) + "|";
+				output = output.substring(0, output.length() - 1); 
+				output += "}\t" +  string+"\t";
 				previousString = string;
 			}
 		}
-		output = output.substring(0, output.length() - 1); // remove last |
-		output += "]";
+		output = output.substring(0, output.length() - 1);
+		output += "}";
 		return output;
 	}
 
-	/**
-	 * Prints out a time line that can match the process log printout.
-	 * @param stringList the string list
-	 * @return a String time line of processes
-	 */
-	public static String printTimeline() 
+
+	public static String printTemplate() 
 	{
-
-		String output = "[";
-		for(int i = 0; i<100; i++) {
-			output += String.format("%3d",i) + "|";
+		String output = "{";
+		for(int i = 0; i<100; i++) 
+		{
+			output += i+"\t";
 		}
-		output = output.substring(0, output.length() - 1); // remove last |
-		output += "]";
+		output = output.substring(0, output.length() - 1);
+		output += "}";
 		return output;
 	}
 
-	/**
-	 * Takes 5 lists and makes clones of them
-	 * @param list1, list2, list3, list4, list5
-	 * @return clone is an arraylist of 5 arraylist of processes
-	 */
-	public static ArrayList<ArrayList<Process>> deepCopy( ArrayList<Process> list1, ArrayList<Process> list2,
+	
+	public static ArrayList<ArrayList<Process>> copyProcesses( ArrayList<Process> list1, ArrayList<Process> list2,
 			ArrayList<Process> list3, ArrayList<Process> list4, ArrayList<Process> list5) 
 	{
-		ArrayList<Process> list1clone = new ArrayList<Process>();
-		ArrayList<Process> list2clone = new ArrayList<Process>();
-		ArrayList<Process> list3clone = new ArrayList<Process>();
-		ArrayList<Process> list4clone = new ArrayList<Process>();
-		ArrayList<Process> list5clone = new ArrayList<Process>();
+		ArrayList<Process> clone1 = new ArrayList<Process>();
+		ArrayList<Process> clone2 = new ArrayList<Process>();
+		ArrayList<Process> clone3 = new ArrayList<Process>();
+		ArrayList<Process> clone4 = new ArrayList<Process>();
+		ArrayList<Process> clone5 = new ArrayList<Process>();
 		ArrayList<ArrayList<Process>> clone = new ArrayList<ArrayList<Process>>();
 
 		for(Process p: list1)
 		{  
-			list1clone.add(p.clone()); 
+			clone1.add(p.clone()); 
 		}
-		clone.add(list1clone);
+		clone.add(clone1);
 
 		for(Process p: list2)
 		{  
-			list2clone.add(p.clone());  
+			clone2.add(p.clone());  
 		}
-		clone.add(list2clone);
+		clone.add(clone2);
 
 		for(Process p: list3)
 		{   
-			list3clone.add(p.clone());  
+			clone3.add(p.clone());  
 		}
-		clone.add(list3clone);
+		clone.add(clone3);
 
 		for(Process p: list4)
 		{  
-			list4clone.add(p.clone());  
+			clone4.add(p.clone());  
 		}
-		clone.add(list4clone);
+		clone.add(clone4);
 
 		for(Process p: list5)
 		{   
-			list5clone.add(p.clone());   
+			clone5.add(p.clone());   
 		}
-		clone.add(list5clone);
+		clone.add(clone5);
 
 		return clone;
 	}
+	
+	
+	 public static void getThroughputAverages(ArrayList<String> ThroughputAverages)
+	    {
+	    	System.out.println
+	    	("FCFS Throughput Average: " + ThroughputAverages.get(0) + "\n");
+	    	
+	    }
 }
