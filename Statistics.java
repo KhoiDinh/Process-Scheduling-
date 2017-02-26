@@ -3,43 +3,49 @@ import java.util.ArrayList;
 public class Statistics 
 {
 
-	private static float AverageSwitch(ArrayList<Process> list) 
+	private static float AverageSwitchTime(ArrayList<Process> list) 
 	{
-		float turnTime = 0.0f;
-		for(Process p: list)
+		float switchTime = 0.0f;
+		for(int i=0; i <list.size(); i++)//for(Process p:list)
 		{	
-			turnTime += p.getSwitchTime();
+			Process chose = list.get(i);
+			switchTime += chose.getSwitchTime();
 		}
-		return (turnTime / list.size());
+		return (switchTime / list.size());
 	}
 
 
 	private static float AverageWaitTime(ArrayList<Process> list) 
 	{
-		float waiting = 0.0f;
-		for(Process p: list)
-		{	waiting += p.getWait();	}
-		return (waiting / list.size());
+		float waitTime = 0.0f;
+		for(int i=0; i <list.size(); i++)//for(Process p:list)
+		{	
+			Process chose = list.get(i);
+			waitTime += chose.getWait();	
+		}
+		return (waitTime / list.size());
 	}
 
 
 	private static float AverageResponseTime(ArrayList<Process> list) 
 	{
-		float response = 0.0f;
-		for(Process p: list)
-		{
-			response += p.getTimeValue();
+		float responseTime = 0.0f;
+		for(int i=0; i <list.size(); i++)//for(Process p:list)
+		{	
+			Process chose = list.get(i);
+			responseTime += chose.getTimeValue();
 		}
-		return (response / list.size());
+		return (responseTime / list.size());
 	}
 
 
-	public static float ThroughputCalculationHelper(ArrayList<Process> a)
+	public static float ThroughputCalculationHelper(ArrayList<Process> list)
 	{
 		float count = 0;
-		for(Process p: a)
+		for(int i=0; i <list.size(); i++)//for(Process p:list)
 		{
-			if(p.getEndTime()<100)
+			Process chose = list.get(i);
+			if(chose.getEndTime()<100)
 			{
 				count++;
 			}
@@ -48,19 +54,20 @@ public class Statistics
 	}
 
 
-	public static float ThroughputAverageCalculation(ArrayList<ArrayList<Process>> listOfLists)
+	public static float ThroughputAverageCalculation(ArrayList<ArrayList<Process>> processLists)
 	{
 		float count = 0;
-		for(ArrayList<Process> a: listOfLists)
+		for(int i=0; i<processLists.size(); i++)//(ArrayList<Process> a: processLists)
 		{
-			count = ThroughputCalculationHelper(a);
+			ArrayList<Process>chosenList = processLists.get(i);
+			count = ThroughputCalculationHelper(chosenList);
 		}
-		return count/listOfLists.size();
+		return count/processLists.size();
 	}
 
-	public static String CalculateStats(ArrayList<Process> list)
+	public static String getStatistics(ArrayList<Process> list)
 	{
-		return "Average Turnaround: " + AverageSwitch(list) +
+		return "Average Turnaround: " + AverageSwitchTime(list) +
 				"\nAverage Waiting: " + AverageWaitTime(list) +
 				"\nAverage Response: " + AverageResponseTime(list);
 	}
