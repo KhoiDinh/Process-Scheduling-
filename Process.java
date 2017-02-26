@@ -43,6 +43,42 @@ public class Process
 		actualTime =-1;
 	}
 	
+	public void setRunTime(float expectedTotalRunTime)
+	{
+		this.expectedTotalRunTime = expectedTotalRunTime;
+	}
+	
+	public void setPriority(int priority)
+	{
+		this.priority = priority;
+	}
+	
+	public void setArrivalTime(float arrivalTime)
+	{
+		this.arrivalTime = arrivalTime;
+	}
+	
+	public void setTime(float arrivalTime)
+	{
+		this.arrivalTime = arrivalTime;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public void setActualTime(int actualTime)
+	{
+		this.actualTime = actualTime;
+	}
+	
+	public void setEndTime(int endTime)
+	{
+		this.endTime = endTime;
+	}
+	
+	
 	public int getActualTime()
 	{
 		return actualTime;
@@ -101,41 +137,6 @@ public class Process
 	public void incrementQuanta()
 	{
 		this.quantaTime = quantaTime + 1;
-	}
-	
-	public void setRunTime(float expectedTotalRunTime)
-	{
-		this.expectedTotalRunTime = expectedTotalRunTime;
-	}
-	
-	public void setPriority(int priority)
-	{
-		this.priority = priority;
-	}
-	
-	public void setArrivalTime(float arrivalTime)
-	{
-		this.arrivalTime = arrivalTime;
-	}
-	
-	public void setTime(float arrivalTime)
-	{
-		this.arrivalTime = arrivalTime;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	
-	public void setActualTime(int actualTime)
-	{
-		this.actualTime = actualTime;
-	}
-	
-	public void setEndTime(int endTime)
-	{
-		this.endTime = endTime;
 	}
 	
 	public void decrementExpectedTotalRunTime()
