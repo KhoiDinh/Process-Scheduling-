@@ -2,56 +2,55 @@ import java.util.ArrayList;
 
 public class FCFS 
 {
-	private static int QUANTA_MAX = 100;
-	private ArrayList<Process> processList;
-	private ArrayList<String> stringList;
+	private ArrayList<Process> processes;
 	private ArrayList<Process> values;
-	
-	public FCFS(ArrayList<Process> processList)
+	private ArrayList<String> stringList;
+	private static int QUANTA_MAX = 100;
+
+
+	public FCFS(ArrayList<Process> processes)
 	{
-		this.processList = processList;
+		this.processes = processes;
 		stringList = new ArrayList<String>();
 		values = new ArrayList<Process>();
 		run();
 	}
-	
+
+	public ArrayList<String> getStringList()
+	{
+		return stringList;
+	}
+
+	public ArrayList<Process> getValues()
+	{
+		return values;
+	}
+
 	private void run()
 	{
-		int quanta =0;
-		
-		while(!processList.isEmpty() && quanta <= QUANTA_MAX)
+		int quantaCount =0;
+
+		while(!processes.isEmpty() && quantaCount <= QUANTA_MAX)
 		{
-			Process process = processList.remove(0);
-			
-			while(process.getArrivalTime() > quanta)
+			Process process = processes.remove(0);
+
+			while(process.getArrivalTime() > quantaCount)
 			{
 				stringList.add("");
-				quanta++;
+				quantaCount++;
 			}
-			
-			process.setActualTime(quanta);
+
+			process.setActualTime(quantaCount);
+
 			while(process.getRunTime() >0)
 			{
 				stringList.add(process.getName());
 				process.decrementExpectedTotalRunTime();
 				process.incrementQuanta();
-				process.setEndTime(quanta);
-				quanta++;
+				process.setEndTime(quantaCount);
+				quantaCount++;
 			}
 			values.add(process);
 		}
 	}
-	
-	public ArrayList<String> getStringList()
-	{
-		return stringList;
-	}
-	
-	public ArrayList<Process> getValues()
-	{
-		return values;
-	}
-	
-	
-	
 }
