@@ -56,7 +56,7 @@ public class SJF {
 		while (quanta < QUANTA_MAX) {
 			// add Processes to a queue for processes that have arrived
 			for (Process process : processes) {
-				if (process.getArrivalTime() < quanta) {
+				if (process.getArrivalTime() <= quanta) {
 					queue.add(process);
 					//processes.remove(process);
 				}
