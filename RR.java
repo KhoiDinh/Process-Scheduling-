@@ -63,25 +63,27 @@ public class RR {
 
 			if (!queue.isEmpty()) {
 				current = queue.remove(0);
-				if (current.getStartExecutionTime() < 0) {
+				if (current.getStartExecutionTime() < 0 && quanta < QUANTA_MAX) {
 					current.setStartExecutionTime(quanta);
 				}
 
-				System.out.print("[" + current.getName() + "]");
-				current.decrementExecutionTimeRemaining();
+				if (current.getStartExecutionTime() > -1) {
+					System.out.print("[" + current.getName() + "]");
+					current.decrementExecutionTimeRemaining();
 
-				if (current.getExecutionTimeRemaining() <= 0) {
-					current.setEndTime(quanta);
-					completed.add(current);
+					if (current.getExecutionTimeRemaining() <= 0) {
+						current.setEndTime(quanta);
+						completed.add(current);
 
-					processesFinished++;
-					totalTurnaroundTime += current.calculateTurnaroundTime();
-					totalWaitTime += current.calculateWaitTime();
-					totalResponseTime += current.calculateResponseTime();
-				} else {
-					queue.add(current);
+						processesFinished++;
+						totalTurnaroundTime += current.calculateTurnaroundTime();
+						totalWaitTime += current.calculateWaitTime();
+						totalResponseTime += current.calculateResponseTime();
+					} else {
+						queue.add(current);
+					}
+					quanta++;
 				}
-				quanta++;
 			} else {
 				System.out.print("[*]");
 				quanta++;
