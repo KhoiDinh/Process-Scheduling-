@@ -132,15 +132,15 @@ public class Process {
 	}
 	
 	public int calculateTurnaroundTime() {
-		return endTime - arrivalTime;
+		return Math.max(endTime - arrivalTime, 0);
 	}
 	
 	public int calculateWaitTime() {
-		return calculateTurnaroundTime() - givenExecutionTime;
+		return Math.max(calculateTurnaroundTime() - givenExecutionTime, 0);
 	}
 	
 	public int calculateResponseTime() {
-		return startExecutionTime - arrivalTime;
+		return Math.max(startExecutionTime - arrivalTime, 0);
 	}
 
 	/*
