@@ -43,9 +43,9 @@ public class FCFS {
 
 	private void execute() {
 		int quanta = 0;
-		int totalTurnaroundTime = 0;
-		int totalWaitTime = 0;
-		int totalResponseTime = 0;
+		double totalTurnaroundTime = 0;
+		double totalWaitTime = 0;
+		double totalResponseTime = 0;
 
 		for (Process process : processes) {
 			if (quanta < QUANTA_MAX) {
@@ -66,8 +66,9 @@ public class FCFS {
 				totalTurnaroundTime += process.calculateTurnaroundTime();
 				totalWaitTime += process.calculateWaitTime();
 				totalResponseTime += process.calculateResponseTime();
-			} else
+			} else {
 				break;
+			}
 		}
 
 		System.out.println("\n");
