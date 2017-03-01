@@ -137,6 +137,18 @@ public class Process {
 		}
 	}
 	
+	public int calculateTurnaroundTime() {
+		return endTime - arrivalTime;
+	}
+	
+	public int calculateWaitTime() {
+		return calculateTurnaroundTime() - givenExecutionTime;
+	}
+	
+	public int calculateResponseTime() {
+		return startExecutionTime - arrivalTime;
+	}
+	
 	public Process clone()
 	{
 		Process process = new Process();
