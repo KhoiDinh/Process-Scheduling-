@@ -1,12 +1,11 @@
 import java.util.*;
 
 public class Process {
-	private float arrivalTime;
-	private float givenExecutionTime;
-	private float executionTimeRemaining;
-	private float startExecutionTime;
-	private float endTime;
-	private float waitTime;
+	private int arrivalTime;
+	private int givenExecutionTime;
+	private int executionTimeRemaining;
+	private int startExecutionTime;
+	private int endTime;
 	private int priority;
 	private Random random;
 	private String name;
@@ -14,14 +13,26 @@ public class Process {
 	private static int MAX_WAIT_TIME = 5;
 	private static int HIGHEST_PRIORITY = 1;
 
-	public Process() {
-		
+	public Process(int seed) {
+		this.name = "";
+		random = new Random(seed);
+		arrivalTime = generateIntTime(99);
+		givenExecutionTime = generateIntTime(10) + 1;
+		executionTimeRemaining = givenExecutionTime;
+		priority = random.nextInt(4) + 1;
+
+		endTime = -1;
+		startExecutionTime = -1;
+	}
+
+	private int generateIntTime1(int min, int max) {
+		return random.nextInt() * (max - min) + min;
 	}
 	
-	private float generateFloatTime(float min, float max) {
-		return random.nextFloat() * (max - min) + min;
+	private int generateIntTime(int range) {
+		return random.nextInt(range);
 	}
-	
+
 	// Turnaround time – time from arrival to completion.
 	// Response time – time from arrival to the first instance of output.
 	// Execution time – time from start of execution
@@ -30,12 +41,11 @@ public class Process {
 	public Process(String name, int seed) {
 		this.name = name;
 		random = new Random(seed);
-		arrivalTime = generateFloatTime(0, 99);
-		givenExecutionTime = generateFloatTime(0.1f, 10);
+		arrivalTime = generateIntTime(99);
+		givenExecutionTime = generateIntTime(10) + 1;
 		executionTimeRemaining = givenExecutionTime;
 		priority = random.nextInt(4) + 1;
-		
-		waitTime = 0;
+
 		endTime = -1;
 		startExecutionTime = -1;
 	}
@@ -43,92 +53,76 @@ public class Process {
 	public static void sortList(ArrayList<Process> list) {
 		Comparator<Process> comparator = new Comparator<Process>() {
 			public int compare(Process process1, Process process2) {
-				return new Float(process1.arrivalTime).compareTo(new Float(process2.arrivalTime));
+				if (process1.arrivalTime < process2.arrivalTime) {
+					return -1;
+				} else if (process1.arrivalTime < process2.arrivalTime) {
+					return 1;
+				} else {
+					return 0;
+				}
 			}
 		};
 		Collections.sort(list, comparator);
 	}
-	
-	public void setArrivalTime(float arrivalTime) {
+
+	public void setArrivalTime(int arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
-	
-	public void setGivenExecutionTime(float givenExecutionTime) {
+
+	public void setGivenExecutionTime(int givenExecutionTime) {
 		this.givenExecutionTime = givenExecutionTime;
 	}
 
-	public void setExecutionTimeRemaining(float executionTimeRemaining) {
+	public void setExecutionTimeRemaining(int executionTimeRemaining) {
 		this.executionTimeRemaining = executionTimeRemaining;
 	}
 
-	public void setStartExecutionTime(float startExecutionTime) {
+	public void setStartExecutionTime(int startExecutionTime) {
 		this.startExecutionTime = startExecutionTime;
 	}
 
-	public void setEndTime(float endTime) {
+	public void setEndTime(int endTime) {
 		this.endTime = endTime;
-	}
-
-	public void setWaitTime(int waitTime) {
-		this.waitTime = waitTime;
 	}
 
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public float getArrivalTime() {
+	public int getArrivalTime() {
 		return arrivalTime;
 	}
-	
-	public float getGivenExecutionTime() {
+
+	public int getGivenExecutionTime() {
 		return givenExecutionTime;
 	}
-	
-	public float getExecutionTimeRemaining() {
+
+	public int getExecutionTimeRemaining() {
 		return executionTimeRemaining;
 	}
-	
-	public float getStartExecutionTime() {
+
+	public int getStartExecutionTime() {
 		return startExecutionTime;
 	}
-	
-	public float getEndTime() {
+
+	public int getEndTime() {
 		return endTime;
 	}
-	
-	public float getWaitTime() {
-		return waitTime;
-	}
-	
+
 	public int getPriority() {
 		return priority;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
 
 	public void decrementExecutionTimeRemaining() {
 		executionTimeRemaining--;
-	}
-
-	public void decrementWaitTime() {
-		waitTime--;
-	}
-
-	public void incrementWaitTime() {
-		waitTime++;
-		/*
-		if (waitTime == MAX_WAIT_TIME) {
-			waitTime = 0;
-			increasePriority();
-		}
-		*/
 	}
 
 	public void increasePriority() {
@@ -148,9 +142,9 @@ public class Process {
 	public int calculateResponseTime() {
 		return startExecutionTime - arrivalTime;
 	}
-	
-	public Process clone()
-	{
+
+	/*
+	public Process clone() {
 		Process process = new Process();
 		process.setArrivalTime(arrivalTime);
 		process.setGivenExecutionTime(givenExecutionTime);
@@ -158,5 +152,5 @@ public class Process {
 		process.setPriority(priority);
 		return process;
 	}
-	
+	*/
 }
