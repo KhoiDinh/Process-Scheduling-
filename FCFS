@@ -1,56 +1,79 @@
 import java.util.ArrayList;
 
-public class FCFS 
-{
+public class FCFS {
 	private ArrayList<Process> processes;
-	private ArrayList<Process> values;
-	private ArrayList<String> stringList;
-	private static int QUANTA_MAX = 100;
+	private static int QUANTA_MAX = 99;
+	private static int NUMBER_OF_PROCESSES_TO_MAKE = 30;
 
-
-	public FCFS(ArrayList<Process> processes)
-	{
+	public FCFS(ArrayList<Process> processes) {
 		this.processes = processes;
-		stringList = new ArrayList<String>();
-		values = new ArrayList<Process>();
-		run();
+		execute();
 	}
 
-	public ArrayList<String> getStringList()
-	{
-		return stringList;
+	public ArrayList<Process> getProcesses() {
+		return this.processes;
 	}
 
-	public ArrayList<Process> getValues()
-	{
-		return values;
-	}
-
-	private void run()
-	{
-		int quantaCount =0;
-
-		while(!processes.isEmpty() && quantaCount <= QUANTA_MAX)
-		{
-			Process process = processes.remove(0);
-
-			while(process.getArrivalTime() > quantaCount)
-			{
-				stringList.add("");
-				quantaCount++;
-			}
-
-			process.setActualTime(quantaCount);
-
-			while(process.getRunTime() >0)
-			{
-				stringList.add(process.getName());
-				process.decrementExpectedTotalRunTime();
-				process.incrementQuanta();
-				process.setEndTime(quantaCount);
-				quantaCount++;
-			}
-			values.add(process);
+	public static void main(String[] args) {
+		ArrayList<Process> processes = new ArrayList<Process>();
+		for (int i = 1; i <= NUMBER_OF_PROCESSES_TO_MAKE; i++) {
+			Process process = new Process("P" + i, i);
+			processes.add(process);
 		}
+		Process.sortList(processes);
+
+		FCFS fcfs = new FCFS(processes);
+
+		String table = "";
+		for (Process process : fcfs.getProcesses()) {
+			table += "[Process: " + String.format("%3s", process.getName()) + ", Arrival time: "
+					+ String.format("%3d", process.getArrivalTime()) + ", Run time: "
+					+ String.format("%3d", process.getGivenExecutionTime()) + ", Priority: " + process.getPriority()
+					+ ", End time: " + String.format("%3d", process.getEndTime()) + ", Time started: "
+					+ String.format("%3d", process.getStartExecutionTime()) + ", Turnaround time: "
+					+ String.format("%3d", process.calculateTurnaroundTime()) + ", Wait time: "
+					+ String.format("%3d", process.calculateWaitTime()) + ", Response time: "
+					+ String.format("%3d", process.calculateResponseTime()) + "]\n";
+
+		}
+		System.out.println(table);
+	}
+
+	// Wait time = startExecutionTime - arrivalTime
+
+	private void execute() {
+		int quanta = 0;
+		int totalTurnaroundTime = 0;
+		int totalWaitTime = 0;
+		int totalResponseTime = 0;
+
+		for (Process process : processes) {
+			if (quanta < QUANTA_MAX) {
+				while (process.getExecutionTimeRemaining() > 0) {
+					if (process.getArrivalTime() <= quanta) {
+						if (process.getExecutionTimeRemaining() == process.getGivenExecutionTime()) {
+							process.setStartExecutionTime(quanta);
+						}
+						process.decrementExecutionTimeRemaining();
+						quanta++;
+						System.out.print("[" + process.getName() + "]");
+					} else {
+						quanta++;
+						System.out.print("[*]");
+					}
+				}
+				process.setEndTime(quanta);
+				totalTurnaroundTime += process.calculateTurnaroundTime();
+				totalWaitTime += process.calculateWaitTime();
+				totalResponseTime += process.calculateResponseTime();
+			} else
+				break;
+		}
+
+		System.out.println("\n");
+		System.out.println("Average turnaround time: " + totalTurnaroundTime / processes.size());
+		System.out.println("Average wait time: " + totalWaitTime / processes.size());
+		System.out.println("Average response time: " + totalResponseTime / processes.size());
+		System.out.println();
 	}
 }
