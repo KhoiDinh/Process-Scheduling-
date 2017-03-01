@@ -50,12 +50,12 @@ public class Process {
 		startExecutionTime = -1;
 	}
 
-	public static void sortList(ArrayList<Process> list) {
+	public static void sortListByArrivalTime(ArrayList<Process> list) {
 		Comparator<Process> comparator = new Comparator<Process>() {
 			public int compare(Process process1, Process process2) {
 				if (process1.arrivalTime < process2.arrivalTime) {
 					return -1;
-				} else if (process1.arrivalTime < process2.arrivalTime) {
+				} else if (process1.arrivalTime > process2.arrivalTime) {
 					return 1;
 				} else {
 					return 0;
