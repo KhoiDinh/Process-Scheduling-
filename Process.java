@@ -49,12 +49,19 @@ public class Process {
 		Collections.sort(list, comparator);
 	}
 	
+	public void getArrivalTime(float arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+	
+	public void setGivenExecutionTime(float givenExecutionTime) {
+		this.givenExecutionTime = givenExecutionTime;
+	}
 
 	public void setExecutionTimeRemaining(float executionTimeRemaining) {
 		this.executionTimeRemaining = executionTimeRemaining;
 	}
 
-	public void setStartExecutionlTime(float startExecutionTime) {
+	public void setStartExecutionTime(float startExecutionTime) {
 		this.startExecutionTime = startExecutionTime;
 	}
 
@@ -114,13 +121,14 @@ public class Process {
 		waitTime--;
 	}
 
-	public void incrementQuantaWait() {
+	public void incrementWaitTime() {
 		waitTime++;
-
+		/*
 		if (waitTime == MAX_WAIT_TIME) {
 			waitTime = 0;
 			increasePriority();
 		}
+		*/
 	}
 
 	public void increasePriority() {
