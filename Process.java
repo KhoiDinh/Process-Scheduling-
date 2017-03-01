@@ -49,7 +49,7 @@ public class Process {
 		Collections.sort(list, comparator);
 	}
 	
-	public void getArrivalTime(float arrivalTime) {
+	public void setArrivalTime(float arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
 	
@@ -135,6 +135,16 @@ public class Process {
 		if (priority > HIGHEST_PRIORITY) {
 			priority--;
 		}
+	}
+	
+	public Process clone()
+	{
+		Process process = new Process();
+		process.setArrivalTime(arrivalTime);
+		process.setGivenExecutionTime(givenExecutionTime);
+		process.setName(name);
+		process.setPriority(priority);
+		return process;
 	}
 	
 }
