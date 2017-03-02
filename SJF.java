@@ -4,7 +4,6 @@ public class SJF {
 	private ArrayList<Process> processes;
 	private ArrayList<Process> queue;
 	private Process shortest;
-	private ArrayList<String> output;
 	private ArrayList<Process> completed;
 	private static int QUANTA_MAX = 99;
 	private static int NUMBER_OF_PROCESSES_TO_MAKE = 30;
@@ -54,7 +53,6 @@ public class SJF {
 		double processesFinished = 0;
 		
 		while (quanta < QUANTA_MAX) {
-			// add Processes to a queue for processes that have arrived
 			for (Process process : processes) {
 				if (process.getArrivalTime() <= quanta) {
 					queue.add(process);
@@ -63,9 +61,7 @@ public class SJF {
 			}
 			processes.removeAll(queue);
 
-			// if queue is not empty, add shortest process
 			if (!queue.isEmpty()) {
-				// find shortest process out of arrived processes
 				shortest = queue.get(0);
 				for (Process process : queue) {
 					if (process.getGivenExecutionTime() < shortest.getGivenExecutionTime()) {
@@ -76,7 +72,7 @@ public class SJF {
 				shortest.setStartExecutionTime(quanta);
 				queue.remove(shortest);
 
-				// add to time quanta current shortest process
+				// Run till death.
 				while (shortest.getExecutionTimeRemaining() > 0) {
 					shortest.decrementExecutionTimeRemaining();
 					quanta++;
